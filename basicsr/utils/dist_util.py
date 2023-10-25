@@ -72,7 +72,10 @@ def get_dist_info():
 
 
 def master_only(func):
-
+    '''
+    Ensure that only the master node (in distributed training) 
+    executes "func".
+    '''
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         rank, _ = get_dist_info()
