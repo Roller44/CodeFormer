@@ -1,7 +1,7 @@
 # general settings
 name: VQGAN-512-ds32-nearest-stage1
 model_type: VQGANModel
-num_gpu: 8
+num_gpu: 1
 manual_seed: 0
 
 # dataset and data loader settings
@@ -14,16 +14,16 @@ datasets:
     io_backend:
       type: disk
 
-    in_size: 512
-    gt_size: 512
+    in_size: 128
+    gt_size: 128
     mean: [0.5, 0.5, 0.5]
     std: [0.5, 0.5, 0.5]
     use_hflip: true
     use_corrupt: false # for VQGAN
 
     # data loader
-    num_worker_per_gpu: 2
-    batch_size_per_gpu: 4
+    num_worker_per_gpu: 4
+    batch_size_per_gpu: 64
     dataset_enlarge_ratio: 100
 
     prefetch_mode: cpu
@@ -43,7 +43,7 @@ datasets:
 # network structures
 network_g:
   type: VQAutoEncoder
-  img_size: 512
+  img_size: 128
   nf: 64
   ch_mult: [1, 2, 2, 4, 4, 8]
   quantizer: 'nearest'

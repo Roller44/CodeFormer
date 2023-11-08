@@ -14,8 +14,8 @@ datasets:
     io_backend:
       type: disk
 
-    in_size: 512
-    gt_size: 512
+    in_size: 128
+    gt_size: 128
     mean: [0.5, 0.5, 0.5]
     std: [0.5, 0.5, 0.5]
     use_hflip: true
@@ -36,8 +36,8 @@ datasets:
     # latent_gt_path: './experiments/pretrained_models/VQGAN/latent_gt_code1024.pth'
 
     # data loader
-    num_worker_per_gpu: 2
-    batch_size_per_gpu: 4
+    num_worker_per_gpu: 1
+    batch_size_per_gpu: 1
     dataset_enlarge_ratio: 100
     prefetch_mode: ~
 
@@ -65,7 +65,7 @@ network_g:
 
 network_vqgan: # this config is needed if no pre-calculated latent
   type: VQAutoEncoder
-  img_size: 512
+  img_size: 128
   nf: 64
   ch_mult: [1, 2, 2, 4, 4, 8]
   quantizer: 'nearest'
