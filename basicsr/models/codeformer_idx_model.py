@@ -90,13 +90,13 @@ class CodeFormerIdxModel(SRModel):
 
         if self.generate_idx_gt:
             x = self.hq_vqgan_fix.encoder(self.gt)
-            _, _, quant_stats = self.hq_vqgan_fix.quantize(x)
+            z_q, _, quant_stats = self.hq_vqgan_fix.quantize(x)
             min_encoding_indices = quant_stats['min_encoding_indices']
             self.idx_gt = min_encoding_indices.view(self.b, -1)
         
         if self.hq_feat_loss:
             # quant_feats
-            quant_feat_gt = self.net_g.quantize.get_codebook_feat(self.idx_gt, shape=[self.b,16,16,256])
+            quant_feat_gt = self.net_g.quantize.get_codebook_feat(self.idx_gt, shape=z_q.permute(0, 2, 3, 1).shape)
 
         logits, lq_feat = self.net_g(self.input, w=0, code_only=True)
 

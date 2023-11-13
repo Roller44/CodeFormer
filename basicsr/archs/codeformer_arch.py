@@ -179,7 +179,6 @@ class CodeFormer(VQAutoEncoder):
         self.dim_embd = dim_embd
         self.dim_mlp = dim_embd*2
 
-        self.position_emb = nn.Parameter(torch.zeros(latent_size, self.dim_embd))
         self.feat_emb = nn.Linear(256, self.dim_embd)
 
         # transformer
@@ -232,10 +231,14 @@ class CodeFormer(VQAutoEncoder):
         lq_feat = x
         # ################# Transformer ###################
         # quant_feat, codebook_loss, quant_stats = self.quantize(lq_feat)
-        pos_emb = self.position_emb.unsqueeze(1).repeat(1,x.shape[0],1)
+        
         # BCHW -> BC(HW) -> (HW)BC
         feat_emb = self.feat_emb(lq_feat.flatten(2).permute(2,0,1))
         query_emb = feat_emb
+        if not hasattr(self, 'position_emb'):
+            self.position_emb = nn.Parameter(torch.zeros(feat_emb.shape[0], self.dim_embd)).to(feat_emb)
+
+        pos_emb = self.position_emb.unsqueeze(1).repeat(1,x.shape[0],1)
         # Transformer encoder
         for layer in self.ft_layers:
             query_emb = layer(query_emb, query_pos=pos_emb)
