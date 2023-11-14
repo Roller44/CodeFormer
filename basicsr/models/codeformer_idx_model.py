@@ -12,7 +12,7 @@ from .sr_model import SRModel
 
 
 @MODEL_REGISTRY.register()
-class CodeFormerIdxModel(SRModel):
+class SCodeFormerIdxModel(SRModel):
     def feed_data(self, data):
         self.gt = data['gt'].to(self.device)
         self.input = data['in'].to(self.device)
